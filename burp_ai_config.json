@@ -1,0 +1,25 @@
+{
+  "llm_provider": "ollama",
+  "ollama_base_url": "http://localhost:11434",
+  "ollama_model": "qwen3-coder-next:cloud",
+  "anthropic_api_key": "",
+  "target_base_url": "https://demo.owasp-juice.shop/#/",
+  "log_enabled": true,
+  "max_iterations": 20,
+  
+  "notes": {
+    "llm_provider": "Choose 'ollama' or 'anthropic'",
+    "ollama_models": [
+      "qwen2.5-coder:32b - Best for coding and technical tasks",
+      "deepseek-r1:32b - Great reasoning model",
+      "llama3.1:70b - Strong general purpose",
+      "mixtral:8x7b - Fast and capable"
+    ],
+    "anthropic_models": [
+      "claude-sonnet-4-20250514 - Latest Sonnet",
+      "claude-opus-4-20250514 - Most capable"
+    ],
+    "target_base_url": "Base URL of target application (e.g., https://api.example.com)",
+    "max_iterations": "Maximum number of autonomous testing iterations (1-100)"
+  }
+}

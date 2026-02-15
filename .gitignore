@@ -1,0 +1,20 @@
+# Python / Jython
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Logs & reports (generated)
+*.log
+pentest_report_*.txt
+pentest_report.txt
+pentest_requests.log
+
+# Burp exports / temporary
+*.har
+*.zip
+archive
