@@ -10,11 +10,26 @@ Thumbs.db
 
 # Logs & reports (generated)
 *.log
+burpai_logs/
 pentest_report_*.txt
 pentest_report.txt
 pentest_requests.log
+
+# Java / Compilation
+*.class
+bin/
+build/
+.gradle/
+dist/
+# libs/*.jar  <-- Un-ignored so repo is buildable out of the box
+
+# Backups
+*.bak
+*.~*
 
 # Burp exports / temporary
 *.har
 *.zip
 archive
+
+fatjar_work/
