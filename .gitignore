@@ -33,3 +33,9 @@ dist/
 archive
 
 fatjar_work/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr

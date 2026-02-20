@@ -3,7 +3,7 @@
   "ollama_base_url": "http://localhost:11434",
   "ollama_model": "qwen3-coder-next:cloud",
   "anthropic_api_key": "",
-  "target_base_url": "https://demo.owasp-juice.shop/#/",
+  "target_base_url": "https://example.com/",
   "log_enabled": true,
   "max_iterations": 20,
   
