@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.burpai'
-version = '1.0.0'
+version = '1.2.0'
 
 repositories {
   mavenCentral()
@@ -20,20 +20,42 @@ dependencies {
 }
 
 java {
+  // Use whatever JDK is installed locally, but emit Java 17 bytecode.
+  // Burp Suite ships with Java 17+ — targeting 17 means the extension loads
+  // on every Burp version since 2023 without the user needing a separate JDK.
   toolchain {
     languageVersion = JavaLanguageVersion.of(23)
   }
 }
 
-// “Fat jar” so you can load it easily into Burp
+// Target Java 17 class-file format regardless of the local compiler version
+compileJava.options.release = 17
+
+// "Fat jar" so you can drop it straight into Burp
 tasks.jar {
-  archiveFileName = 'burp-ai-pentester-fat.jar'
+  archiveFileName = "burp-ai-pentester-${version}.jar"
   destinationDirectory = file('dist')
   manifest {
-    attributes('Main-Class': 'com.burpai.aipentester.Extension')
+    attributes(
+      'Main-Class': 'com.burpai.aipentester.Extension',
+      'Implementation-Version': version,
+      'Minimum-Java': '17'
+    )
   }
   from {
     configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
   }
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Copies the versioned fat jar into releases/ so it gets committed to GitHub
+tasks.register('release') {
+  dependsOn jar
+  doLast {
+    def relDir = file('releases')
+    relDir.mkdirs()
+    copy { from file("dist/burp-ai-pentester-${version}.jar"); into relDir }
+    file('releases/LATEST').text = version
+    println "Released: releases/burp-ai-pentester-${version}.jar  (Java 17+ bytecode)"
+  }
 }
