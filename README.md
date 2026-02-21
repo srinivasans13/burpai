@@ -34,9 +34,9 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 
 ```bash
 ollama serve
-ollama pull glm4:cloud           # fast, reliable tool-calling
+ollama pull glm-5:cloud              # fast, reliable tool-calling
 # or
-ollama pull qwen2.5-coder:32b   # best results, needs ~20 GB VRAM
+ollama pull qwen3-coder-next:cloud   # best results, high VRAM
 ```
 
 ### 2. Build the fat JAR
@@ -190,7 +190,7 @@ All agent output is also written to `~/burpai_logs/agent_<timestamp>.log` — ev
 {
   "llm_provider": "ollama",
   "ollama_base_url": "http://localhost:11434",
-  "ollama_model": "glm4:cloud",
+  "ollama_model": "glm-5:cloud",
   "gemini_api_key": "",
   "gemini_model": "gemini-2.0-flash",
   "target_base_url": "https://example.com/",
