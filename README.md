@@ -149,6 +149,7 @@ When your prompt names a specific vulnerability, the agent tests **only that cla
 | `deserialization` | Insecure Deserialization — Java RO, PHP, JSON type confusion |
 | `race condition` | Race Condition — parallel identical requests |
 | `mass assignment` | Mass Assignment — extra body fields |
+| `llm`, `prompt injection`, `ai inject`, `jailbreak`, `system prompt` | LLM / Prompt Injection — direct injection, system prompt leakage, indirect injection, data exfiltration |
 
 ### Off-target findings
 
