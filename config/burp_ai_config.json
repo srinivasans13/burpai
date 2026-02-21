@@ -2,13 +2,29 @@
   "llm_provider": "ollama",
   "ollama_base_url": "http://localhost:11434",
   "ollama_model": "qwen3-coder-next:cloud",
+  "gemini_api_key": "",
+  "gemini_model": "gemini-3-flash-preview",
   "anthropic_api_key": "",
   "target_base_url": "https://example.com/",
   "log_enabled": true,
   "max_iterations": 20,
   
   "notes": {
-    "llm_provider": "Choose 'ollama' or 'anthropic'",
+    "llm_provider": "Choose 'ollama', 'gemini', or 'anthropic'",
+    "gemini_setup": [
+      "1. Get an API key from https://aistudio.google.com/app/apikey",
+      "2. Set llm_provider to 'gemini'",
+      "3. Set gemini_api_key to your key",
+      "4. Set gemini_model to the desired model (see below)"
+    ],
+    "gemini_models": [
+      "gemini-2.0-flash - Fast, cost-efficient, excellent for agentic tasks",
+      "gemini-2.5-flash-preview - Preview of next-gen flash model",
+      "gemini-2.0-flash-thinking-exp - Flash with extended reasoning",
+      "gemini-3-flash-preview - Preview of latest Gemini 3 flash model",
+      "gemini-1.5-flash - Stable, fast multimodal model",
+      "gemini-1.5-pro - Most capable Gemini 1.5 model"
+    ],
     "ollama_models": [
       "qwen2.5-coder:32b - Best for coding and technical tasks",
       "deepseek-r1:32b - Great reasoning model",

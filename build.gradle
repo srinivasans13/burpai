@@ -21,12 +21,14 @@ dependencies {
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(23)
+    languageVersion = JavaLanguageVersion.of(17)
   }
 }
 
 // “Fat jar” so you can load it easily into Burp
 tasks.jar {
+  archiveFileName = 'burp-ai-pentester-fat.jar'
+  destinationDirectory = file('dist')
   manifest {
     attributes('Main-Class': 'com.burpai.aipentester.Extension')
   }
