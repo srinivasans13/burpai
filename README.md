@@ -16,6 +16,8 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 | **HTML reports** | Structured findings report saved to `~/burpai_logs/` |
 | **Repeater Copilot** | AI suggestion panel embedded in every Repeater tab |
 
+![burpai agent UI — SQL Injection run](assets/ui.png)
+
 ---
 
 ## Requirements
@@ -177,6 +179,8 @@ Click **Generate Report** after a run. A styled HTML report is saved to `~/burpa
 
 - Summary table (name, severity, location)
 - Full detail per finding (description, impact, PoC, remediation, evidence request IDs)
+
+![burpai HTML report — SQL Injection finding](assets/report.png)
 
 All agent output is also written to `~/burpai_logs/agent_<timestamp>.log` — every iteration, tool call result, and vulnerability report — for offline review and evidence archiving.
 
