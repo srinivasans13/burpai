@@ -1,5 +1,7 @@
 ﻿# burpai — Autonomous AI Pentest Agent for Burp Suite
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A **Burp Suite extension** built on the [Montoya API](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/) that embeds an autonomous AI penetration testing agent directly into Burp. All HTTP traffic flows through Burp's engine — every request the agent fires is visible in the HTTP history, and you can inspect it in Burp's native editors in real time.
 
 ---
@@ -256,3 +258,9 @@ legacy_python/
 - Use only against systems you **own** or have **explicit written permission** to test
 - Do not commit real API keys, session tokens, cookies, or target-specific data to this repository
 - The agent can send many requests quickly — respect rate limits and applicable laws
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
