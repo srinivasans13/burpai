@@ -11,8 +11,8 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 | Feature | Description |
 |---|---|
 | **AI Pentester** | Autonomous agentic loop — probes targets, fires requests through Burp, confirms and reports vulnerabilities |
-| **9 specialised tools** | HTTP requests, crawling, fuzzing, extraction, decoding, variable interpolation, reporting |
-| **Multi-provider LLM** | Ollama (local, any model)  Gemini 2.x Flash / Pro |
+| **11 agent tools** | HTTP requests, crawling, fuzzing, extraction, decoding, variable interpolation, site-map querying, reporting, run control |
+| **Multi-provider LLM** | Ollama (local, any model) → Gemini 2.x Flash / Pro |
 | **Focused task mode** | "Find SSRF" tests *only* SSRF — 19 vulnerability classes auto-detected from your prompt |
 | **Timing-based detection** | `fuzz_parameter` tracks response latency per payload — catches blind SSRF and blind CMDi |
 | **HTML reports** | Structured findings report saved to `~/burpai_logs/` |
@@ -77,7 +77,7 @@ ollama pull qwen3-coder-next:cloud   # best results, high VRAM
 1. Open the **AI Pentester** tab in Burp
 2. Set **Provider**, **Ollama URL / Gemini API key**, and **Model**
 3. Enter a **Target Base URL** and a task prompt (e.g. `Find SSRF`)
-4. Optionally right-click any request in Burp  **Send to AI Pentester** to give the agent a starting request
+4. Optionally right-click any request in Burp → **Send to AI Pentester** to give the agent a starting request
 5. Click **Start Agent**
 
 ---
@@ -125,6 +125,8 @@ The agent picks the right tool for each step, guided by the system prompt in [`s
 | `fuzz_parameter` | Batch-test one parameter with a payload list. Locations: `query`, `body`, `json_body`, `header`, `path`. Reports status, body length, and **response timing** per payload |
 | `decode_encode` | Local decode/encode without an HTTP round-trip: `jwt_decode`, `base64_decode/encode`, `url_decode/encode`, `hex_decode/encode`, `html_decode/encode` |
 | `search_in_response` | Regex search a stored response body with configurable context lines |
+| `get_sitemap` | Query Burp's site map and proxy history for a base URL — returns all seen paths and methods without making new requests |
+| `finish_run` | Signal the agent loop to stop and emit a structured summary of findings, notes, and next actions |
 | `report_vulnerability` | Submit a confirmed finding: severity, location, description, PoC, impact, remediation, evidence request IDs |
 
 ### Variable interpolation
@@ -245,10 +247,19 @@ An AI assistant embedded inside **every Repeater tab** — as an **AI Copilot** 
 src/main/java/com/burpai/aipentester/
   Extension.java              — Montoya entrypoint; registers both features
   AgentTab.java               — AI Pentester tab UI (provider selector, request log, editors)
-  AgentEngine.java            — Autonomous agent loop + all 9 tool implementations
+  AgentEngine.java            — Thin facade wiring all agent services; public API consumed by AgentTab
+  AgentLoop.java              — Orchestrates the agentic iteration loop (per-iteration LLM call + tool dispatch)
+  ToolExecutor.java           — Executes all 11 tool calls (HTTP, fuzz, spider, decode, sitemap, report, etc.)
+  LlmGateway.java             — LLM client creation, system-prompt loading, persona overlays, tool schema
   LlmClient.java              — LLM client interface (ConnResult, ToolCall, ChatResult)
   OllamaClient.java           — Ollama HTTP client with automatic text-mode fallback
   GeminiClient.java           — Gemini REST API client
+  ReportService.java          — Generates the HTML vulnerability report
+  MemoryManager.java          — Thread-safe per-run memory (request history, observations, snapshots)
+  TargetMemoryStore.java      — Persistent cross-session target memory (vector memory / facts store)
+  AgentStateSnapshot.java     — Immutable run-state snapshot injected into each iteration's prompt
+  AgentUtils.java             — Pure static utilities shared across agent services
+  AgentLogger.java            — Centralised logging to UI callback and log file
   RepeaterCopilot.java        — Per-tab AI analysis engine (Repeater Copilot)
   RepeaterCopilotEditor.java  — ExtensionProvidedHttpRequestEditor implementation
   Imported.java               — Models a request imported via Burp context menu
@@ -259,9 +270,6 @@ src/main/resources/
 
 config/
   burp_ai_config.json         — Startup defaults (provider, model, target URL, API key)
-
-legacy_python/
-  BurpAgenticPentester.py     — Original Jython version (requires Jython in Burp)
 ```
 
 ---
