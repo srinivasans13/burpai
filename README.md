@@ -63,7 +63,9 @@ Then load `dist/burp-ai-pentester-*.jar` via **Extensions → Installed → Add*
 
 ---
 
-### 1. Pull a model (Ollama)
+### Set up your LLM
+
+**Ollama (local)**
 
 ```bash
 ollama serve
@@ -72,7 +74,11 @@ ollama pull glm-5:cloud              # fast, reliable tool-calling
 ollama pull qwen3-coder-next:cloud   # best results, high VRAM
 ```
 
-### 2. Run the agent
+**Gemini** — get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey), then enter it in the UI.
+
+---
+
+### Run the agent
 
 1. Open the **AI Pentester** tab in Burp
 2. Set **Provider**, **Ollama URL / Gemini API key**, and **Model**
@@ -215,10 +221,15 @@ All agent output is also written to `~/burpai_logs/agent_<timestamp>.log` — ev
   "ollama_model": "glm-5:cloud",
   "gemini_api_key": "",
   "gemini_model": "gemini-2.0-flash",
+  "anthropic_api_key": "",
   "target_base_url": "https://example.com/",
+  "log_enabled": true,
   "max_iterations": 20
 }
 ```
+
+> **Persona** and **vector memory** are configured in the UI, not in this file.
+> Persona: dropdown in the AI Pentester tab. Vector memory is automatic — no configuration needed.
 
 ---
 
