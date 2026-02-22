@@ -16,9 +16,14 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 | **Focused task mode** | "Find SSRF" tests *only* SSRF — 18 vulnerability classes auto-detected from your prompt |
 | **Timing-based detection** | `fuzz_parameter` tracks response latency per payload — catches blind SSRF and blind CMDi |
 | **HTML reports** | Structured findings report saved to `~/burpai_logs/` |
+| **Burp native reporting** | Confirmed findings posted directly to the Burp Dashboard Issues pane — severity, confidence, PoC and evidence requests included |
+| **AI Personas** | Task-focused personas (Auth, SSRF, Injection, etc.) sharpen the agent's strategy from iteration one |
+| **Vector memory** | Per-target memory persists WAF info, endpoints, parameters and vuln history across runs |
 | **Repeater Copilot** | AI suggestion panel embedded in every Repeater tab |
 
 ![burpai agent UI — SQL Injection run](assets/ui.png)
+
+![Burp native issue reporting — SQL Injection Authentication Bypass reported to the Dashboard](assets/Burp_Issue.png)
 
 ---
 
