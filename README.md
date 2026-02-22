@@ -13,7 +13,7 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 | **AI Pentester** | Autonomous agentic loop — probes targets, fires requests through Burp, confirms and reports vulnerabilities |
 | **9 specialised tools** | HTTP requests, crawling, fuzzing, extraction, decoding, variable interpolation, reporting |
 | **Multi-provider LLM** | Ollama (local, any model)  Gemini 2.x Flash / Pro |
-| **Focused task mode** | "Find SSRF" tests *only* SSRF — 18 vulnerability classes auto-detected from your prompt |
+| **Focused task mode** | "Find SSRF" tests *only* SSRF — 19 vulnerability classes auto-detected from your prompt |
 | **Timing-based detection** | `fuzz_parameter` tracks response latency per payload — catches blind SSRF and blind CMDi |
 | **HTML reports** | Structured findings report saved to `~/burpai_logs/` |
 | **Burp native reporting** | Confirmed findings posted directly to the Burp Dashboard Issues pane — severity, confidence, PoC and evidence requests included |
@@ -30,7 +30,7 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 ## Requirements
 
 - **Burp Suite** Community or Pro — 2023.x or newer
-- **Java 17+** (build-time and runtime)
+- **Java 17+** — only required if building from source; the prebuilt JAR runs on Burp's bundled JRE (no separate Java install needed)
 - **LLM backend** — one of:
   - [Ollama](https://ollama.com/) running locally (free, offline)
   - Google Gemini API key (free tier at [aistudio.google.com](https://aistudio.google.com/app/apikey))
@@ -38,6 +38,30 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 ---
 
 ## Quick Start
+
+### Option A — Prebuilt JAR (recommended)
+
+1. Download the latest `burp-ai-pentester-*.jar` from [Releases](../../releases)
+2. In Burp: **Extensions → Installed → Add**  
+   Extension type: `Java`  
+   Path: the downloaded `.jar`
+3. The **AI Pentester** tab appears — configure and go
+
+> No Java installation required. Burp Suite ships its own JRE.
+
+### Option B — Build from source
+
+```powershell
+.\gradlew.bat jar
+```
+
+Output: `dist/burp-ai-pentester-*.jar`
+
+> **OneDrive users:** If Gradle hangs on cache files, add `--no-build-cache --no-daemon`
+
+Then load `dist/burp-ai-pentester-*.jar` via **Extensions → Installed → Add**.
+
+---
 
 ### 1. Pull a model (Ollama)
 
@@ -48,23 +72,7 @@ ollama pull glm-5:cloud              # fast, reliable tool-calling
 ollama pull qwen3-coder-next:cloud   # best results, high VRAM
 ```
 
-### 2. Build the fat JAR
-
-```powershell
-.\gradlew.bat jar
-```
-
-Output: `dist/burp-ai-pentester-fat.jar`
-
-> **OneDrive users:** If Gradle hangs on cache files, add `--no-build-cache --no-daemon`
-
-### 3. Load in Burp
-
-**Extensions  Installed  Add**  
-Extension type: `Java`  
-Path: `dist/burp-ai-pentester-fat.jar`
-
-### 4. Run the agent
+### 2. Run the agent
 
 1. Open the **AI Pentester** tab in Burp
 2. Set **Provider**, **Ollama URL / Gemini API key**, and **Model**
@@ -175,7 +183,7 @@ ADDITIONAL NOTES FOR FURTHER TESTING:
 `fuzz_parameter` records `duration_ms` for every payload. A result is flagged `timing_anomaly` if:
 
 - Response took **> 3 seconds** (absolute), or
-- Response took **> 3 the baseline** request duration
+- Response took **> 3× the baseline** request duration
 
 This catches **blind SSRF** and **blind command injection** where the server reaches out internally but returns a generic response body.
 
@@ -226,7 +234,7 @@ An AI assistant embedded inside **every Repeater tab** — as an **AI Copilot** 
 1. Send any request in Repeater — the copilot auto-triggers on each response
 2. The AI Copilot tab shows reasoning and a **suggested next test request**
 3. The suggestion is ready in the editor with all original auth headers preserved
-4. Click **Approve**  then Burp's **Send** to fire it
+4. Click **Approve** → then Burp's **Send** to fire it
 5. Use **Analyze Again** for a fresh suggestion, or **Reject** to discard
 
 ---
