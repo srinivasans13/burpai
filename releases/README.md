@@ -20,6 +20,7 @@ Montoya API is provided by Burp Suite at runtime — it is **not** included in t
 
 | Version | Highlights |
 |---------|-----------|
+| 1.3.0   | AI Personas (Auth, SSRF, Injection, etc.); Burp native issue reporting via Dashboard; Vector memory for target-aware context across runs |
 | 1.2.0   | Java 17 bytecode target; `finish_run` tool; `get_sitemap` (site map + proxy history); FUZZ path substitution; comprehensive OWASP seed prompts |
 | 1.0.0   | Initial release: dual LLM provider (Ollama / Gemini), 9 pentesting tools |
 
