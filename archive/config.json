@@ -1,0 +1,63 @@
+{
+  "llm_provider": "ollama",
+  "anthropic_api_key": "",
+  "ollama_base_url": "http://localhost:11434",
+  "ollama_model": "qwen3-coder-next:cloud",
+  
+  "target_base_url": "https://demo.testfire.net",
+  "burp_proxy": "http://127.0.0.1:8080",
+  "use_proxy": true,
+  "log_file": "pentest_requests.log",
+  "report_file": "pentest_report.txt",
+  
+  "scope": {
+    "include_paths": [
+      "/api/*",
+      "/admin/*",
+      "/user/*"
+    ],
+    "exclude_paths": [
+      "/logout",
+      "/static/*",
+      "/images/*",
+      "/css/*",
+      "/js/*"
+    ]
+  },
+  
+  "testing_config": {
+    "aggressive_mode": false,
+    "max_requests": 1000,
+    "max_tool_iterations": 20,
+    "delay_between_requests": 0.5,
+    "timeout": 30,
+    "verify_ssl": false
+  },
+  
+  "authentication": {
+    "type": "none",
+    "credentials": {
+      "username": "",
+      "password": ""
+    },
+    "token": "",
+    "headers": {}
+  },
+  
+  "vulnerability_focus": [
+    "sql_injection",
+    "xss",
+    "idor",
+    "authentication_bypass",
+    "authorization_issues",
+    "business_logic",
+    "api_security"
+  ],
+  
+  "reporting": {
+    "format": "text",
+    "include_screenshots": false,
+    "severity_threshold": "Low",
+    "cvss_threshold": 0.0
+  }
+}
