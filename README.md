@@ -12,9 +12,11 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 |---|---|
 | **AI Pentester** | Autonomous agentic loop — probes targets, fires requests through Burp, confirms and reports vulnerabilities |
 | **11 agent tools** | HTTP requests, crawling, fuzzing, extraction, decoding, variable interpolation, site-map querying, reporting, run control |
-| **Multi-provider LLM** | Ollama (local, any model) → Gemini 2.x Flash / Pro |
+| **Multi-provider LLM** | Ollama (local), Google Gemini, **DeepSeek**, and **OpenRouter** (Anthropic, OpenAI, etc.) |
 | **Focused task mode** | "Find SSRF" tests *only* SSRF — 19 vulnerability classes auto-detected from your prompt |
 | **Timing-based detection** | `fuzz_parameter` tracks response latency per payload — catches blind SSRF and blind CMDi |
+| **Integrated Token Map** | Intelligent detection of JWT, UUID, API keys, and CSRF tokens across headers and cookies with automatic mirror detection |
+| **CSV Export** | Export agent findings and HTTP history directly to CSV for external reporting |
 | **HTML reports** | Structured findings report saved to `~/burpai_logs/` |
 | **Burp native reporting** | Confirmed findings posted directly to the Burp Dashboard Issues pane — severity, confidence, PoC and evidence requests included |
 | **AI Personas** | Task-focused personas (Auth, SSRF, Injection, etc.) sharpen the agent's strategy from iteration one |
@@ -33,7 +35,9 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 - **Java 17+** — only required if building from source; the prebuilt JAR runs on Burp's bundled JRE (no separate Java install needed)
 - **LLM backend** — one of:
   - [Ollama](https://ollama.com/) running locally (free, offline)
-  - Google Gemini API key (free tier at [aistudio.google.com](https://aistudio.google.com/app/apikey))
+  - Google Gemini API key ([aistudio.google.com](https://aistudio.google.com/app/apikey))
+  - DeepSeek API key ([platform.deepseek.com](https://platform.deepseek.com/))
+  - OpenRouter API key ([openrouter.ai](https://openrouter.ai/)) (for Claude, GPT-4, etc.)
 
 ---
 
@@ -69,12 +73,14 @@ Then load `dist/burp-ai-pentester-*.jar` via **Extensions → Installed → Add*
 
 ```bash
 ollama serve
-ollama pull glm-5:cloud              # fast, reliable tool-calling
-# or
-ollama pull glm-5:cloud   # best results, high VRAM
+ollama pull glm-5:cloud               # fast, reliable tool-calling
 ```
 
-**Gemini** — get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey), then enter it in the UI.
+**Cloud Providers**
+
+- **Gemini**: Get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey).
+- **DeepSeek**: Get an API key at [platform.deepseek.com](https://platform.deepseek.com/).
+- **OpenRouter**: Get an API key at [openrouter.ai](https://openrouter.ai/). Recommended for access to `claude-3-sonnet-20240229`, `gpt-4o`, etc.
 
 ---
 
