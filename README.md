@@ -71,7 +71,7 @@ Then load `dist/burp-ai-pentester-*.jar` via **Extensions → Installed → Add*
 ollama serve
 ollama pull glm-5:cloud              # fast, reliable tool-calling
 # or
-ollama pull qwen3-coder-next:cloud   # best results, high VRAM
+ollama pull glm-5:cloud   # best results, high VRAM
 ```
 
 **Gemini** — get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey), then enter it in the UI.
@@ -97,7 +97,7 @@ Set `Ollama URL` to `http://localhost:11434`. Models with strong tool-calling gi
 | Model | Notes |
 |---|---|
 | `glm-5:cloud` | Fast, reliable — recommended default |
-| `qwen3-coder-next:cloud` | Best results, high VRAM (~20 GB) |
+| `glm-5:cloud` | Best results, high VRAM (~20 GB) |
 | `kimi-k2.5:cloud` | Strong reasoning |
 | `minimax-m2.5:cloud` | General purpose |
 

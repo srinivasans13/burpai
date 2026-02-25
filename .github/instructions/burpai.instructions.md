@@ -8,6 +8,9 @@ The extension supports four LLM backends: **Ollama** (local, any model), **Googl
 
 ---
 
+## Mandatory
+- Quality of pentesting is paramount — any code change and decision should align with this principle above all else. If a change improves code quality but reduces pentesting effectiveness, it should be rejected or reworked until it meets both criteria.
+
 ## Architecture — Read This First
 
 Every class has a single responsibility. Do not blur these boundaries.
@@ -188,6 +191,3 @@ Java 17+ required at build time. The output JAR runs on Burp's bundled JRE — n
 Load in Burp: **Extensions → Installed → Add → Java → select JAR**
 
 > **Mandatory build rule:** After **every code change** — no exceptions — run `.\gradlew.bat jar` and confirm it exits with `BUILD SUCCESSFUL` before considering the task done. If the build fails, fix all compile errors before stopping. Never leave the repository in a state where the JAR does not reflect the current source.
-
-## Mandatory
-- Quality of pentesting is paramount — any code change and decision should align with this principle above all else. If a change improves code quality but reduces pentesting effectiveness, it should be rejected or reworked until it meets both criteria.
