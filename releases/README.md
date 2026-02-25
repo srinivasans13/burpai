@@ -20,7 +20,8 @@ Montoya API is provided by Burp Suite at runtime — it is **not** included in t
 
 | Version | Highlights |
 |---------|-----------|
-| 1.6.0   | Generic TOKEN MAP (JWT/UUID/hex/opaque/CSRF auto-detected); auth header propagation; `{{var}}` expansion in headers; empty-header suppression for "no auth" tests; `{{_cookie_no_<name>}}` pre-built cookie removal vars; AgentTab UI polish |
+| 1.7.0   | Major architectural refactor (package organization); CSV export for Agent results; default model updated to \`glm-5:cloud\`; specialized security personas. |
+| 1.6.0   | Generic TOKEN MAP (JWT/UUID/hex/opaque/CSRF auto-detected); auth header propagation; \`{{var}}\` expansion in headers; empty-header suppression for \"no auth\" tests; \`{{_cookie_no_<name>}}\" pre-built cookie removal vars; AgentTab UI polish |
 | 1.5.0   | OpenRouter & DeepSeek clients; Collaborator OOB; WAF detection; bug fixes |
 | 1.3.0   | AI Personas (Auth, SSRF, Injection, etc.); Burp native issue reporting via Dashboard; Vector memory for target-aware context across runs |
 | 1.2.0   | Java 17 bytecode target; `finish_run` tool; `get_sitemap` (site map + proxy history); FUZZ path substitution; comprehensive OWASP seed prompts |
