@@ -20,6 +20,7 @@ Montoya API is provided by Burp Suite at runtime — it is **not** included in t
 
 | Version | Highlights |
 |---------|-----------|
+| 1.8.0   | Native Claude and OpenAI provider support; updated UI for API key management; enhanced LLM gateway dispatch. |
 | 1.7.0   | Major architectural refactor (package organization); CSV export for Agent results; default model updated to \`glm-5:cloud\`; specialized security personas. |
 | 1.6.0   | Generic TOKEN MAP (JWT/UUID/hex/opaque/CSRF auto-detected); auth header propagation; \`{{var}}\` expansion in headers; empty-header suppression for \"no auth\" tests; \`{{_cookie_no_<name>}}\" pre-built cookie removal vars; AgentTab UI polish |
 | 1.5.0   | OpenRouter & DeepSeek clients; Collaborator OOB; WAF detection; bug fixes |
