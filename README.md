@@ -12,7 +12,7 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 |---|---|
 | **AI Pentester** | Autonomous agentic loop — probes targets, fires requests through Burp, confirms and reports vulnerabilities |
 | **11 agent tools** | HTTP requests, crawling, fuzzing, extraction, decoding, variable interpolation, site-map querying, reporting, run control |
-| **Multi-provider LLM** | Ollama (local), Google Gemini, **DeepSeek**, and **OpenRouter** (Anthropic, OpenAI, etc.) |
+| **Multi-provider LLM** | Ollama (local), Google Gemini, **Anthropic Claude**, **DeepSeek**, **OpenAI**, and **OpenRouter** |
 | **Focused task mode** | "Find SSRF" tests *only* SSRF — 19 vulnerability classes auto-detected from your prompt |
 | **Timing-based detection** | `fuzz_parameter` tracks response latency per payload — catches blind SSRF and blind CMDi |
 | **Integrated Token Map** | Intelligent detection of JWT, UUID, API keys, and CSRF tokens across headers and cookies with automatic mirror detection |
@@ -36,8 +36,10 @@ A **Burp Suite extension** built on the [Montoya API](https://portswigger.github
 - **LLM backend** — one of:
   - [Ollama](https://ollama.com/) running locally (free, offline)
   - Google Gemini API key ([aistudio.google.com](https://aistudio.google.com/app/apikey))
+  - Anthropic API key ([console.anthropic.com](https://console.anthropic.com/))
   - DeepSeek API key ([platform.deepseek.com](https://platform.deepseek.com/))
-  - OpenRouter API key ([openrouter.ai](https://openrouter.ai/)) (for Claude, GPT-4, etc.)
+  - OpenAI API key ([platform.openai.com](https://platform.openai.com/))
+  - OpenRouter API key ([openrouter.ai](https://openrouter.ai/))
 
 ---
 
@@ -79,8 +81,10 @@ ollama pull glm-5:cloud               # fast, reliable tool-calling
 **Cloud Providers**
 
 - **Gemini**: Get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey).
+- **Anthropic**: Get an API key at [console.anthropic.com](https://console.anthropic.com/).
 - **DeepSeek**: Get an API key at [platform.deepseek.com](https://platform.deepseek.com/).
-- **OpenRouter**: Get an API key at [openrouter.ai](https://openrouter.ai/). Recommended for access to `claude-3-sonnet-20240229`, `gpt-4o`, etc.
+- **OpenAI**: Get an API key at [platform.openai.com](https://platform.openai.com/).
+- **OpenRouter**: Get an API key at [openrouter.ai](https://openrouter.ai/).
 
 ---
 
@@ -103,9 +107,9 @@ Set `Ollama URL` to `http://localhost:11434`. Models with strong tool-calling gi
 | Model | Notes |
 |---|---|
 | `glm-5:cloud` | Fast, reliable — recommended default |
-| `glm-5:cloud` | Best results, high VRAM (~20 GB) |
 | `kimi-k2.5:cloud` | Strong reasoning |
 | `minimax-m2.5:cloud` | General purpose |
+| `deepseek-r1:32b` | Great reasoning model, high VRAM (~20 GB) |
 
 The agent automatically falls back to **text-mode tool parsing** if the model returns HTTP 500 on the tool-calling endpoint — no manual configuration needed.
 
@@ -118,9 +122,22 @@ The agent automatically falls back to **text-mode tool parsing** if the model re
 
 | Model | Notes |
 |---|---|
-| `gemini-2.0-flash` | Fast, cost-efficient — recommended |
+| `gemini-3-flash-preview` | Latest Gemini 3 flash — recommended |
 | `gemini-2.5-flash-preview` | Next-gen flash, strong reasoning |
+| `gemini-2.0-flash` | Fast, cost-efficient |
 | `gemini-1.5-pro` | Most capable Gemini 1.5 |
+
+### Anthropic Claude
+
+1. Get an API key at [console.anthropic.com](https://console.anthropic.com/)
+2. Select **Anthropic** in the Provider dropdown
+3. Enter your API key
+4. Choose a model:
+
+| Model | Notes |
+|---|---|
+| `claude-sonnet-4-20250514` | Latest Sonnet — recommended |
+| `claude-opus-4-20250514` | Most capable Claude model |
 
 ---
 
@@ -226,7 +243,7 @@ All agent output is also written to `~/burpai_logs/agent_<timestamp>.log` — ev
   "ollama_base_url": "http://localhost:11434",
   "ollama_model": "glm-5:cloud",
   "gemini_api_key": "",
-  "gemini_model": "gemini-2.0-flash",
+  "gemini_model": "gemini-3-flash-preview",
   "anthropic_api_key": "",
   "target_base_url": "https://example.com/",
   "log_enabled": true,
@@ -262,31 +279,51 @@ An AI assistant embedded inside **every Repeater tab** — as an **AI Copilot** 
 
 ```
 src/main/java/com/burpai/aipentester/
-  Extension.java              — Montoya entrypoint; registers both features
-  AgentTab.java               — AI Pentester tab UI (provider selector, request log, editors)
-  AgentEngine.java            — Thin facade wiring all agent services; public API consumed by AgentTab
-  AgentLoop.java              — Orchestrates the agentic iteration loop (per-iteration LLM call + tool dispatch)
-  ToolExecutor.java           — Executes all 11 tool calls (HTTP, fuzz, spider, decode, sitemap, report, etc.)
-  LlmGateway.java             — LLM client creation, system-prompt loading, persona overlays, tool schema
-  LlmClient.java              — LLM client interface (ConnResult, ToolCall, ChatResult)
-  OllamaClient.java           — Ollama HTTP client with automatic text-mode fallback
-  GeminiClient.java           — Gemini REST API client
-  ReportService.java          — Generates the HTML vulnerability report
-  MemoryManager.java          — Thread-safe per-run memory (request history, observations, snapshots)
-  TargetMemoryStore.java      — Persistent cross-session target memory (vector memory / facts store)
-  AgentStateSnapshot.java     — Immutable run-state snapshot injected into each iteration's prompt
-  AgentUtils.java             — Pure static utilities shared across agent services
-  AgentLogger.java            — Centralised logging to UI callback and log file
-  RepeaterCopilot.java        — Per-tab AI analysis engine (Repeater Copilot)
-  RepeaterCopilotEditor.java  — ExtensionProvidedHttpRequestEditor implementation
-  Imported.java               — Models a request imported via Burp context menu
-  ToolResult.java             — Tool call result model
+  Extension.java                    — Montoya entrypoint; registers AgentTab and RepeaterCopilotEditor
+
+  agent/
+    AgentEngine.java                — Thin facade wiring all agent services; public API consumed by AgentTab
+    AgentLoop.java                  — Orchestrates the agentic iteration loop (per-iteration LLM call + tool dispatch)
+    AgentStateSnapshot.java         — Builds compact structured signals injected into each iteration's LLM prompt
+    AgentUtils.java                 — Pure static utilities shared across agent services
+    AgentLogger.java                — Centralised logging to UI callback and timestamped log file
+    MemoryManager.java              — Thread-safe per-run state (responseBodyStore, sessionVars, vulnStore, AttackGraph)
+    TargetMemoryStore.java          — Persistent cross-session target memory (endpoints, params, WAF flags, vuln history)
+
+  clients/
+    OllamaClient.java               — Ollama HTTP client with automatic text-mode fallback
+    GeminiClient.java               — Gemini REST API client
+    DeepSeekClient.java             — DeepSeek platform API client; supports deepseek-chat and deepseek-reasoner (R1/CoT)
+    OpenRouterClient.java           — OpenRouter OpenAI-compatible client with automatic text-mode fallback
+    ClaudeClient.java               — Anthropic Claude direct REST API client
+    OpenAIClient.java               — OpenAI direct REST API client
+
+  llm/
+    LlmClient.java                  — LLM client interface (ConnResult, ToolCall, ChatResult)
+    LlmGateway.java                 — LLM client creation, system-prompt loading, persona overlays, tool schema
+
+  model/
+    AttackGraph.java                — Deterministic graph of endpoints, parameters, tested payload types, extracted variables
+    EndpointNode.java               — Single node in the attack graph
+    ReportService.java              — Generates the HTML vulnerability report
+    VulnClass.java                  — String constants for vulnerability class names
+
+  tools/
+    ToolExecutor.java               — Executes all 11 tool calls (HTTP, fuzz, spider, decode, sitemap, report, etc.)
+    CollaboratorManager.java        — Manages Burp Collaborator OAST session; OOB payload generation and interaction polling
+    Imported.java                   — Immutable model of a request imported via Burp context menu
+    ToolResult.java                 — Tool call result model; serialises to JSON for LLM consumption
+
+  ui/
+    AgentTab.java                   — AI Pentester tab UI (provider selector, request log, editors)
+    RepeaterCopilot.java            — Per-tab AI analysis engine (Repeater Copilot)
+    RepeaterCopilotEditor.java      — ExtensionProvidedHttpRequestEditor implementation
 
 src/main/resources/
-  burp-ai-agent-prompt.md     — Agent system prompt (edit to customise without recompiling)
+  burp-ai-agent-prompt.md          — Agent system prompt (edit to customise without recompiling)
 
 config/
-  burp_ai_config.json         — Startup defaults (provider, model, target URL, API key)
+  burp_ai_config.json              — Startup defaults (provider, model, target URL, API key)
 ```
 
 ---
