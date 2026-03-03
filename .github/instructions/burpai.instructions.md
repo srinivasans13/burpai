@@ -179,6 +179,8 @@ Never test against systems you do not own or have explicit written permission to
 # Build fat JAR (all dependencies bundled)
 .\gradlew.bat jar
 
+.\gradlew.bat jar --no-daemon 2>&1 | Select-String "BUILD|ERROR:|Failure|Jar"
+
 # Output — versioned fat JAR ready to load in Burp
 dist/burp-ai-pentester-<version>.jar
 
