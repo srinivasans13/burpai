@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 23 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '23'
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build fat jar
+        run: ./gradlew jar --no-daemon
+
+      - name: Determine expected jar name from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          JAR_PATH="dist/burp-ai-pentester-${VERSION}.jar"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "jar_path=${JAR_PATH}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify built jar matches tag version
+        run: |
+          JAR_PATH="${{ steps.version.outputs.jar_path }}"
+          if [ ! -f "$JAR_PATH" ]; then
+            echo "::error::Expected jar '$JAR_PATH' was not produced by the build."
+            echo "::error::This usually means build.gradle's 'version' was not bumped to match tag '${{ steps.version.outputs.tag }}' before tagging."
+            echo "Files actually present in dist/:"
+            ls -la dist/ || true
+            exit 1
+          fi
+          echo "Verified: $JAR_PATH exists and matches tag ${{ steps.version.outputs.tag }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          files: ${{ steps.version.outputs.jar_path }}
+          fail_on_unmatched_files: true

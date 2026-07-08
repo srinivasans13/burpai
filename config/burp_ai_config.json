@@ -5,12 +5,17 @@
   "gemini_api_key": "",
   "gemini_model": "gemini-3-flash-preview",
   "anthropic_api_key": "",
+  "azure_endpoint": "https://{resource}.openai.azure.com",
+  "azure_api_key": "",
+  "azure_model": "gpt-4o",
+  "fireworks_api_key": "",
+  "fireworks_model": "accounts/fireworks/models/llama-v3p3-70b-instruct",
   "target_base_url": "https://example.com/",
   "log_enabled": true,
   "max_iterations": 20,
   
   "notes": {
-    "llm_provider": "Choose 'ollama', 'gemini', or 'anthropic'",
+    "llm_provider": "Choose 'ollama', 'gemini', 'anthropic', 'openai', 'openrouter', 'deepseek', 'azure', or 'fireworks'",
     "gemini_setup": [
       "1. Get an API key from https://aistudio.google.com/app/apikey",
       "2. Set llm_provider to 'gemini'",
@@ -34,6 +39,24 @@
     "anthropic_models": [
       "claude-sonnet-4-20250514 - Latest Sonnet",
       "claude-opus-4-20250514 - Most capable"
+    ],
+    "azure_setup": [
+      "1. Get your resource endpoint and API key from the Azure Portal",
+      "2. Set llm_provider to 'azure'",
+      "3. Set azure_endpoint to your resource URL (e.g. https://my-resource.openai.azure.com)",
+      "4. Set azure_api_key to your key",
+      "5. Set azure_model to your deployment name (e.g. gpt-4o)"
+    ],
+    "fireworks_setup": [
+      "1. Get an API key from https://fireworks.ai/account/api-keys",
+      "2. Set llm_provider to 'fireworks'",
+      "3. Set fireworks_api_key to your key",
+      "4. Set fireworks_model to the desired model (see below)"
+    ],
+    "fireworks_models": [
+      "accounts/fireworks/models/llama-v3p3-70b-instruct - Strong general purpose",
+      "accounts/fireworks/models/qwen2p5-72b-instruct - Coding & technical tasks",
+      "accounts/fireworks/models/mixtral-8x22b-instruct - Fast and capable"
     ],
     "target_base_url": "Base URL of target application (e.g., https://api.example.com)",
     "max_iterations": "Maximum number of autonomous testing iterations (1-100)"
